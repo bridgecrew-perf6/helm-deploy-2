@@ -1,0 +1,41 @@
+pipeline {
+    agent {
+        label 'kube-master'
+    }
+    stages {
+        stage('Build-parameter') {
+            steps {
+               
+			   
+			             script { 
+                    properties([
+                        parameters([
+                            choice(
+                                choices: ['Dev', 'Staging', Prod], 
+                                name: 'Environment'
+                            )
+                        ])
+                    ])
+                }
+			   
+            }
+        }
+
+    stage('Deploy to Development ') {
+            when {
+                expression { 
+                   return params.ENVIRONMENT == 'Dev'
+                }
+            }
+            steps {
+                    sh """
+                    echo "deploy to Development environment"
+                    """
+                }
+            }
+   }
+
+
+
+    }
+
